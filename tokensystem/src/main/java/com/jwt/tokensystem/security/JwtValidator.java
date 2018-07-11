@@ -1,10 +1,13 @@
 package com.jwt.tokensystem.security;
 
+import org.springframework.stereotype.Component;
+
 import com.jwt.tokensystem.model.JwtUser;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
+@Component
 public class JwtValidator {
 
 	public JwtUser validate(String token) {

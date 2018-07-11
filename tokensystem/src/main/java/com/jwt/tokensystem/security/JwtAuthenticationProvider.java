@@ -9,11 +9,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import com.jwt.tokensystem.model.JwtToken;
 import com.jwt.tokensystem.model.JwtUser;
 import com.jwt.tokensystem.model.JwtUserDetails;
-
+@Component
 public class JwtAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
 	@Autowired
@@ -28,8 +29,6 @@ public class JwtAuthenticationProvider extends AbstractUserDetailsAuthentication
 	@Override
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
 			UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

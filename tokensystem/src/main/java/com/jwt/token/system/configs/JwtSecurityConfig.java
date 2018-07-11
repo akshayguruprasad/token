@@ -1,7 +1,8 @@
-package com.jwt.tokensystem.configs;
+package com.jwt.token.system.configs;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,9 +23,11 @@ import com.jwt.tokensystem.security.StatusHandler;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
-
+	@Autowired
 	private JwtAuthenticationProvider authenticationProvider;
-private JwtAutenticationEntryPoint authenticateEntryPoint;
+	@Autowired
+	private JwtAutenticationEntryPoint authenticateEntryPoint;
+
 	public AuthenticationManager getAuthenticationManager() {
 		return new ProviderManager(Collections.singletonList(authenticationProvider));
 	}
@@ -32,22 +35,20 @@ private JwtAutenticationEntryPoint authenticateEntryPoint;
 	@Bean
 	public JwtAuthenticationFilterCreated getAuthenticationFilter() {
 		JwtAuthenticationFilterCreated filter = new JwtAuthenticationFilterCreated();
-		filter.setAuthManager(getAuthenticationManager());
-		filter.setStatusHandler(new StatusHandler());
+		filter.setAuthenticationManager(getAuthenticationManager());
+		filter.setAuthenticationSuccessHandler(new StatusHandler());
 		return filter;
 	}
 
-@Override
-protected void configure(HttpSecurity http) throws Exception {
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
 
-http.csrf().disable().antMatcher("**/rest/**").authorizeRequests().and().exceptionHandling().authenticationEntryPoint(authenticateEntryPoint).and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-http.addFilterAfter(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-http.headers().cacheControl();
+		http.csrf().disable().antMatcher("/rest/**").authorizeRequests().and().exceptionHandling()
+				.authenticationEntryPoint(authenticateEntryPoint).and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.addFilterAfter(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.headers().cacheControl();
 
-
-
-}
-
-	
+	}
 
 }
